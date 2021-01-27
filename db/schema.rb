@@ -86,7 +86,7 @@ ActiveRecord::Schema.define(version: 2021_01_26_172917) do
     t.integer "age"
     t.string "description"
     t.integer "role", default: 0
-    t.integer "balance"
+    t.integer "balance", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
