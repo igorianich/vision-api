@@ -3,4 +3,6 @@ class User < ApplicationRecord
   has_many :services
   has_many :requests
   has_many :reviews
+
+  enum role: [:buyer, :seller, :admin]
 end

@@ -4,4 +4,6 @@ class Request < ApplicationRecord
   has_one :response
   has_one :transaction
 
+  enum status: [:pending_answer, :completed, :rejected]
+
 end
