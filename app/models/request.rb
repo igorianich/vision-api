@@ -4,6 +4,7 @@ class Request < ApplicationRecord
   has_one :response
   has_one :payment
 
-  enum status: [:pending_answer, :completed, :rejected]
+  enum status: %i[pending_answer completed rejected]
 
+  validates :text, :file, presence: true, length: { in: 5..100 }
 end

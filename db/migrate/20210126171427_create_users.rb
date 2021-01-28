@@ -10,7 +10,7 @@ class CreateUsers < ActiveRecord::Migration[6.0]
       t.integer :age
       t.string :description
       t.column :role, :integer, default: 0
-      t.integer :balance, default: 0
+      t.float :balance, default: 0
 
       t.timestamps
     end

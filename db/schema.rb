@@ -48,7 +48,6 @@ ActiveRecord::Schema.define(version: 2021_01_26_172917) do
     t.bigint "requester_id"
     t.string "text"
     t.string "file"
-    t.integer "status", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["request_id"], name: "index_responses_on_request_id"
@@ -95,7 +94,7 @@ ActiveRecord::Schema.define(version: 2021_01_26_172917) do
     t.integer "age"
     t.string "description"
     t.integer "role", default: 0
-    t.integer "balance", default: 0
+    t.float "balance", default: 0.0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

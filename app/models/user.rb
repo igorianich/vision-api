@@ -10,5 +10,16 @@ class User < ApplicationRecord
 
   has_secure_password
 
-  enum role: [:buyer, :seller, :admin]
+  enum role: %i[buyer seller admin]
+
+  validates :first_name, :last_name, presence: true, length: { in: 2..30 }
+  validates :description, presence: true, length: { in: 10..130 }
+  validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
+  validates :age, numericality: {
+    only_integer: true, greater_than: 17, less_than: 111
+  }
+
+  def add_balance(arg)
+      User.find_by(id: id).update(balance: balance + arg)
+  end
 end
