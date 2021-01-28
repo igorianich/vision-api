@@ -4,8 +4,6 @@ class UserTokenController < Knock::AuthTokenController
 
   def sign_in
     render json: token_json_hash(entity)
-    # render json: auth_params
-
   end
 
   def sign_up

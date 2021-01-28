@@ -15,6 +15,21 @@ ActiveRecord::Schema.define(version: 2021_01_26_172917) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "payments", force: :cascade do |t|
+    t.bigint "request_id"
+    t.bigint "payer_id"
+    t.bigint "seller_id"
+    t.float "service_price"
+    t.float "net"
+    t.float "commission"
+    t.integer "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["payer_id"], name: "index_payments_on_payer_id"
+    t.index ["request_id"], name: "index_payments_on_request_id"
+    t.index ["seller_id"], name: "index_payments_on_seller_id"
+  end
+
   create_table "requests", force: :cascade do |t|
     t.bigint "requester_id"
     t.bigint "service_id"
@@ -29,11 +44,16 @@ ActiveRecord::Schema.define(version: 2021_01_26_172917) do
 
   create_table "responses", force: :cascade do |t|
     t.bigint "request_id"
+    t.bigint "respondent_id"
+    t.bigint "requester_id"
     t.string "text"
     t.string "file"
+    t.integer "status", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["request_id"], name: "index_responses_on_request_id"
+    t.index ["requester_id"], name: "index_responses_on_requester_id"
+    t.index ["respondent_id"], name: "index_responses_on_respondent_id"
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -65,17 +85,6 @@ ActiveRecord::Schema.define(version: 2021_01_26_172917) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["owner_id"], name: "index_skills_on_owner_id"
-  end
-
-  create_table "transactions", force: :cascade do |t|
-    t.bigint "request_id"
-    t.float "service_price"
-    t.float "net"
-    t.float "commission"
-    t.integer "status"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["request_id"], name: "index_transactions_on_request_id"
   end
 
   create_table "users", force: :cascade do |t|
