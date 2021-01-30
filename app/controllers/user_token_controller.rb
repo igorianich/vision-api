@@ -30,8 +30,4 @@ class UserTokenController < Knock::AuthTokenController
       :role, :description
     )
   end
-
-  def auth_params
-    params.require(:auth).permit(:email, :password)
-  end
 end
