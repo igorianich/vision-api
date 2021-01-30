@@ -20,6 +20,6 @@ class User < ApplicationRecord
   }
 
   def add_balance(arg)
-      User.find_by(id: id).update(balance: balance + arg)
+    update(balance: balance + arg)
   end
 end
