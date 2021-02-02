@@ -13,6 +13,7 @@ class User < ApplicationRecord
   enum role: %i[buyer seller admin]
 
   validates :first_name, :last_name, presence: true, length: { in: 2..30 }
+  validates :password, length: { minimum: 6 }, if: -> { password.present? }
   validates :description, presence: true, length: { in: 10..130 }
   validates_format_of :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
   validates :age, numericality: {
@@ -22,4 +23,9 @@ class User < ApplicationRecord
   def add_balance(arg)
     update(balance: balance + arg)
   end
+
+  def subtract_balance(arg)
+    update(balance: balance - arg)
+  end
+
 end

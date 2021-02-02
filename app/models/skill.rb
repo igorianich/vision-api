@@ -7,7 +7,11 @@ class Skill < ApplicationRecord
 
   private
 
+  def owner_role
+    owner.role
+  end
+
   def rights_to_live_skill
-    owner.role == 'seller' || errors.add(:owner, 'must be seller')
+    owner_role == 'seller' or owner_role == 'admin' || errors.add(:owner, 'must be seller')
   end
 end
