@@ -10,15 +10,18 @@ users = User.create(
   [
     {
       email: 'qwerty@gmail.com', password: '123456', first_name: 'Roman',
-      last_name: 'Mazuh', age: 21, description: 'Some description', role: 0
+      last_name: 'Mazuh', age: 21, description: 'Some description', role: 0,
+      balance: 50
     },
     {
       email: 'asdfgh@gmail.com', password: '123456', first_name: 'Petro',
-      last_name: 'Kazuh', age: 34, description: 'Some description', role: 1
+      last_name: 'Kazuh', age: 34, description: 'Some description', role: 1,
+      balance: 50
     },
     {
       email: 'zxcvbn@gmail.com', password: '123456', first_name: 'Vitalik',
-      last_name: 'Corok', age: 24, description: 'Some description', role: 2
+      last_name: 'Corok', age: 24, description: 'Some description', role: 2,
+      balance: 50
     }
   ]
 )
@@ -70,8 +73,8 @@ responses = Response.create(
 
 reviews = Review.create(
   [
-    { responce_id: 1, reviewer_id: 1, text: 'Some text', file: 'Some file', rate: 4 },
-    { responce_id: 2, reviewer_id: 3, text: 'Some text', file: 'Some file', rate: 5 }
+    { response_id: 1, reviewer_id: 1, text: 'Some text', file: 'Some file', rate: 4 },
+    { response_id: 2, reviewer_id: 3, text: 'Some text', file: 'Some file', rate: 5 }
   ]
 )
 
