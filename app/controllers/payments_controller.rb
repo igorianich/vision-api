@@ -19,7 +19,7 @@ class PaymentsController < ApplicationController
         render_errors(payment_errors)
       end
     else
-      payment_errors.add(:payer, 'is not valid')
+      payment_errors.add(:seller, "can't pay the payment")
       render_errors(payment_errors)
     end
 

@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   patch 'update_me' => 'users#update'
   patch 'update_me' => 'users#update'
   # get 'requests' => 'requests#index'
+  # get 'responses' => 'responses#index'
+
+  resources :responses, only: %i[index create show]
   resources :skills, only: %i[index create update destroy]
   resources :services, only: %i[index create show update destroy]
   resources :requests, only: %i[index create show update destroy]

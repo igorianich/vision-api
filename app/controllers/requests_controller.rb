@@ -78,7 +78,7 @@ class RequestsController < ApplicationController
   end
 
   def load_request
-    @requesto = Request.find_by(id: params[:id]) || head(:not_found)
+    @requesto = user_requests.find_by(id: params[:id]) || head(:not_found)
   end
 
   def user_requests

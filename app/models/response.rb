@@ -12,11 +12,16 @@ class Response < ApplicationRecord
   private
 
   def rights_to_live_response
-    service.owner_id == respondent_id || errors.add(
-      :respondent, "don't have request"
-    )
-    request.requester_id == requester_id || errors.add(
-      :requester, "don't have request"
-    )
+    request.service.owner_id == respondent_id ||
+      errors.add(:respondent, "isn't recipient of the request ")
+
+    request.requester_id == requester_id ||
+      errors.add(:requester, "don't have this request")
+
+    respondent.role == 'seller' ||
+      errors.add(:respondent, 'must be seller')
+
+    Response.where(request_id: request.id).exists? &&
+      errors.add(:request, 'already has an answer')
   end
 end

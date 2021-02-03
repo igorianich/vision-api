@@ -17,20 +17,19 @@ class Payment < ApplicationRecord
 
   def rights_to_live_payment
     request.requester.id == payer_id || errors.add(:payer, "don't have request")
-    request.service.owner_id == seller_id || errors.add(
-      :seller, "don't have request"
-    )
+    request.service.owner_id == seller_id ||
+      errors.add(:seller, "don't have request")
+
     service_price > net || errors.add(:net, "can't be greater than service_price")
     net > commission || errors.add(:net, "can't be less than commission")
   end
 
   def pay_error
-    payer.outgoing_payments.find_by(id: id).status == 'waiting_for_payment' || errors.add(
-      :status, "can't be change"
-    )
-    payer.role != 'seller' || errors.add(
-      :payer, "can't be a seller"
-    )
+    Payment.find_by(id: id).status == 'waiting_for_payment' ||
+      errors.add(:status, "can't be change")
+
+    payer.role != 'seller' ||
+      errors.add(:payer, "can't be a seller")
   end
 
   def good_balance
