@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   resources :skills, only: %i[index create update destroy]
   resources :services, only: %i[index create show update destroy]
   resources :requests, only: %i[index create show update destroy]
+  patch 'requests/:id/decline' => 'requests#decline'
+  resources :payments, only: %i[index show update]
   # resources :users, only: %i[update index]
 
    # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

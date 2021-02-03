@@ -7,16 +7,10 @@ class Payment < ApplicationRecord
 
   validates :service_price, :net, :commission, numericality: { greater_than: 0 }
   validate :rights_to_live_payment
-  validate :good_balance, if: -> { status != 'rejected' }
+  validate :good_balance, :pay_error, if: -> { status == 'paid' }
 
   def pay
-    if status == 'waiting_for_payment'
-      update(status: 'paid')
-      payer.subtract_balance(net)
-      seller.add_balance(net)
-    else
-      "Payment status is #{status}"
-    end
+    update(status: 'paid') && payer.subtract_balance(net) && seller.add_balance(net)
   end
 
   private
@@ -28,6 +22,15 @@ class Payment < ApplicationRecord
     )
     service_price > net || errors.add(:net, "can't be greater than service_price")
     net > commission || errors.add(:net, "can't be less than commission")
+  end
+
+  def pay_error
+    payer.outgoing_payments.find_by(id: id).status == 'waiting_for_payment' || errors.add(
+      :status, "can't be change"
+    )
+    payer.role != 'seller' || errors.add(
+      :payer, "can't be a seller"
+    )
   end
 
   def good_balance

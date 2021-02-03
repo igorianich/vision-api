@@ -1,8 +1,8 @@
 class Request < ApplicationRecord
   belongs_to :requester, class_name: 'User'
   belongs_to :service
-  has_one :response
-  has_one :payment
+  has_one :response, dependent: :destroy
+  has_one :payment, dependent: :destroy
 
   enum status: %i[pending_answer completed rejected]
 
