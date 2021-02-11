@@ -13,7 +13,7 @@ class RequestsController < ApplicationController
   end
 
   def create
-    @requesto = current_user.requests.new(status: 0, **request_params)
+    authorize @requesto = current_user.requests.new(status: 0, **request_params)
     if requesto.save
       payment = Payment.create(payment_params)
       payment.reserve

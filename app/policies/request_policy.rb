@@ -19,6 +19,10 @@ class RequestPolicy < ApplicationPolicy
     user_is_requester_of_record? || user_is_owner_of_service?
   end
 
+  def create?
+    @user.buyer?
+  end
+
   def update?
     user_is_requester_of_record?
   end

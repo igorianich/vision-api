@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   patch 'requests/:id/decline' => 'requests#decline'
   patch 'payments/:id/pay' => 'payments#pay'
   resources :payments, only: %i[index show]
+  resources :reviews, only: %i[index create show update destroy]
   # resources :users, only: %i[update index]
 
    # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

@@ -9,6 +9,7 @@ class SkillsController < ApplicationController
 
   def create
     skill = current_user.skills.new(skill_params)
+    authorize skill
     if skill.save
       render json: skill
     else

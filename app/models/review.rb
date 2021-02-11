@@ -4,18 +4,12 @@ class Review < ApplicationRecord
 
   validates :rate, inclusion: 1..5
   validates :file, :text, presence: true, length: { in: 5..100 }
+  validate :rights_to_live_review
 
   private
 
   def rights_to_live_review
-    # smth_exists = Response.where(
-    #   id: response_id, requester_id: reviewer_id
-    # ).exists?
-
-    return if response.requester_id == reviewer_id
-
-    errors.add(
-      :reviewer, "don't have request"
-    )
+    Review.where(response: response).exists? &&
+      errors.add(:response, 'already has a review')
   end
 end

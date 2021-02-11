@@ -1,13 +1,19 @@
 class ResponsePolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.all
+      case user.role
+      when 'buyer'
+        user.incoming_responses
+      when 'seller'
+        user.outgoing_responses
+      when 'admin'
+        scope.all
+      end
     end
   end
 
   def show?
-    @user == @record.requester && @record.request.payment.paid? ||
-      user_is_respondent_of_record?
+    @user == @record.requester || user_is_respondent_of_record?
   end
 
   def create?

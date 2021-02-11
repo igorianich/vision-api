@@ -5,15 +5,13 @@ class ServicePolicy < ApplicationPolicy
     end
   end
 
-  def update?
-    user_is_owner_of_record?
-    # if user_is_owner_of_record?
-    #   true
-    # else
-    #   raise Pundit::NotAuthorizedError, reason: 'user_is_owner_of_record'
-    # end
+  def create?
+    @user.seller?
   end
 
+  def update?
+    user_is_owner_of_record?
+  end
 
   def destroy?
     user_is_owner_of_record?

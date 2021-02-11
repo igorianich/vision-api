@@ -4,8 +4,12 @@ class SkillPolicy < ApplicationPolicy
   # frozen_string_literal: true
   class Scope < Scope
     def resolve
-      user.skills
+      scope.all
     end
+  end
+
+  def create?
+    @user.seller?
   end
 
   def update?
@@ -13,7 +17,7 @@ class SkillPolicy < ApplicationPolicy
   end
 
   def show?
-    user_is_owner_of_record?
+    true
   end
 
   def destroy?
