@@ -18,7 +18,7 @@ class Response < ApplicationRecord
     request.requester_id == requester_id ||
       errors.add(:requester, "don't have this request")
 
-    respondent.role == 'seller' ||
+    respondent.seller? ||
       errors.add(:respondent, 'must be seller')
 
     Response.where(request_id: request.id).exists? &&

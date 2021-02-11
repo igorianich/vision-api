@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
 class ResponsesController < ApplicationController
-  before_action :load_response, only: %i[
-    show
-  ]
+  before_action :load_response, only: %i[show]
+
   def index
-    render json: user_responses
-    # p 'sfdsfdsf'
+    responses = policy_scope(Response)
+    render json: responses
   end
 
   def show
@@ -14,16 +13,15 @@ class ResponsesController < ApplicationController
   end
 
   def create
-    requester = Request.find(response_params[:request_id]).requester
-    @answer = Response.new(
-      requester: requester, respondent: current_user, **response_params
+    request = Request.find(response_params[:request_id])
+    answer = Response.new(
+      requester: request.requester, respondent: current_user, **response_params
     )
     if answer.save
-      request = answer.request
-      request.completed!
-      render json: [answer, request]
+      request.completed! && request.payment.pay
+      render json: { answer: answer, request: request }
     else
-      render_errors(response_errors)
+      render_errors(answer.errors)
     end
   end
 
@@ -31,29 +29,11 @@ class ResponsesController < ApplicationController
 
   attr_reader :answer
 
-  def response_errors
-    answer.errors
-  end
-
   def load_response
-    @answer = user_responses.find_by(id: params[:id]) || head(:not_found)
+    @answer = Response.find(params[:id])
+    authorize answer
   end
 
-  def user_responses
-    case current_user.role
-    when 'buyer'
-      current_user.incoming_responses
-    when 'seller'
-      current_user.outgoing_responses
-    else
-      Response.all
-    end
-  end
-
-  # def response_service
-  #   response.service
-  # end
-  #
   def response_params
     params.require(:response).permit(:text, :file, :request_id)
   end

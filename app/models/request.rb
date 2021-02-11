@@ -4,24 +4,22 @@ class Request < ApplicationRecord
   has_one :response, dependent: :destroy
   has_one :payment, dependent: :destroy
 
-  enum status: %i[pending_answer completed rejected]
+  enum status: { pending_answer: 0, completed: 1, rejected: 2 }
 
   validates :text, :file, presence: true, length: { in: 5..100 }
-  validate :rights_to_live_request
-  validate :good_balance
+  validate :good_balance, on: :create
+  validate :decline_error, if: -> { status == 'rejected' }
 
-  def rights_to_live_request
-    requester_role == 'buyer' or requester_role == 'admin' ||
-      errors.add(:requester, 'must be buyer')
-  end
-
-  def requester_role
-    requester.role
-  end
+  private
 
   def good_balance
     requester.balance >= service.price || errors.add(
       :requester, "haven't enough balance"
     )
+  end
+
+  def decline_error
+    Request.find(id).pending_answer? ||
+      errors.add(:status, "can't be change")
   end
 end

@@ -13,6 +13,7 @@ gem 'puma', '~> 4.1'
 gem 'jbuilder', '~> 2.7'
 gem 'kaminari'
 gem 'knock'
+gem 'pundit'
 gem 'rspec_api_documentation'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'

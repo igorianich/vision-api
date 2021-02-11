@@ -11,7 +11,7 @@ class User < ApplicationRecord
 
   has_secure_password
 
-  enum role: %i[buyer seller admin]
+  enum role: { buyer: 0, seller: 1, admin: 2 }
 
   validates :first_name, :last_name, presence: true, length: { in: 2..30 }
   validates :password, length: { minimum: 6 }, if: -> { password.present? }

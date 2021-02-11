@@ -8,15 +8,6 @@ class UserTokenController < Knock::AuthTokenController
     render json: token_json_hash(entity)
   end
 
-  def sign_up
-    user = User.new(user_params)
-    if user.save
-      render json: token_json_hash(user)
-    else
-      render json: { errors: user.errors }, status: :unprocessable_entity
-    end
-  end
-
   private
 
   def token_json_hash(user)
@@ -24,12 +15,5 @@ class UserTokenController < Knock::AuthTokenController
       jwt: "Bearer #{Knock::AuthToken.new(payload: { sub: user.id }).token}",
       payload: user.as_json
     }
-  end
-
-  def user_params
-    params.require(:user).permit(
-      :first_name, :last_name, :age, :email, :password,
-      :role, :description
-    )
   end
 end

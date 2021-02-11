@@ -1,30 +1,24 @@
 # frozen_string_literal: true
 
 class PaymentsController < ApplicationController
-  before_action :load_payment, only: %i[show update destroy user_payments true_requester payment_errors]
+  before_action :load_payment, only: %i[show pay]
 
   def index
-    render json: user_payments
+    payments = policy_scope(Payment)
+    render json: payments
   end
 
   def show
     render json: payment
   end
 
-  def update
-    if payment.payer == current_user && status != 'rejected'
-      if payment.pay
-        render json: payment
-      else
-        render_errors(payment_errors)
-      end
+  def pay
+    if payment.pay
+      render json: payment
     else
-      payment_errors.add(:seller, "can't pay the payment")
       render_errors(payment_errors)
     end
-
   end
-
 
   private
 
@@ -34,29 +28,8 @@ class PaymentsController < ApplicationController
     payment.errors
   end
 
-
-  #
-  # def true_requester
-  #   requesto.requester == current_user || request_errors.add(:requester, 'is not valid')
-  # end
-
   def load_payment
-    @payment = user_payments.find_by(id: params[:id]) || head(:not_found)
+    @payment = Payment.find(params[:id])
+    authorize @payment
   end
-
-  def not_found
-    head(:not_found)
-  end
-
-  def user_payments
-    case current_user.role
-    when 'seller'
-      current_user.incoming_payments || not_found
-    when 'buyer'
-      current_user.outgoing_payments || not_found
-    when 'admin'
-      Payment.all
-    end
-  end
-
 end
