@@ -1,17 +1,12 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  def update
-    if current_user.update(user_params)
-      render json: current_user
-    else
-      render json: { errors: current_user.errors }, status: :unprocessable_entity
-    end
-  end
+  has_scope :by_skill_name
 
   def index
-    render json: User.where(role: :seller)
-                     .select(:id, :first_name, :last_name, :age, :description)
+    render json: apply_scopes(User)
+      .where(role: :seller)
+      .select(:id, :first_name, :last_name, :age, :description)
   end
 
   def show
@@ -19,6 +14,14 @@ class UsersController < ApplicationController
                      .select(:id, :first_name, :last_name, :age, :description)
                      .find(params[:id])
     # render json: user
+  end
+
+  def update
+    if current_user.update(user_params)
+      render json: current_user
+    else
+      render json: { errors: current_user.errors }, status: :unprocessable_entity
+    end
   end
 
   def create

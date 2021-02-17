@@ -17,14 +17,38 @@ RSpec.resource 'Users' do
   get '/users' do
     let(:user) { create(:user, role: :seller) }
 
-    example_request 'getting a list of users' do
-      users_hash = JSON.parse(response_body, symbolize_names: true)
-      expect(users_hash[0][:id]).to eq(user.id)
-      expect(users_hash[0][:first_name]).to eq(user.first_name)
-      expect(users_hash[0][:last_name]).to eq(user.last_name)
-      expect(users_hash[0][:age]).to eq(user.age)
-      expect(users_hash[0][:description]).to eq(user.description)
-      expect(status).to eq(200)
+    context 'without scopes' do
+      example_request 'getting a list of users' do
+        users_hash = JSON.parse(response_body, symbolize_names: true)
+        expect(users_hash[0][:id]).to eq(user.id)
+        expect(users_hash[0][:first_name]).to eq(user.first_name)
+        expect(users_hash[0][:last_name]).to eq(user.last_name)
+        expect(users_hash[0][:age]).to eq(user.age)
+        expect(users_hash[0][:description]).to eq(user.description)
+        expect(status).to eq(200)
+      end
+    end
+
+    context "with valid scope 'by_skill_name'" do
+      let(:skill) { create(:skill, owner: user) }
+      let(:by_skill_name) { skill.name }
+      parameter :by_skill_name
+
+      example_request 'getting a list of users' do
+        users_hash = JSON.parse(response_body, symbolize_names: true)
+        expect(users_hash[0][:id]).to eq(user.id)
+      end
+    end
+
+    context "with invalid scope 'by_skill_name'" do
+      let(:skill) { create(:skill, owner: user) }
+      let(:by_skill_name) { 'sadas' }
+      parameter :by_skill_name
+
+      example_request 'getting a list of users' do
+        users_hash = JSON.parse(response_body, symbolize_names: true)
+        expect(users_hash).to match_array([])
+      end
     end
   end
 

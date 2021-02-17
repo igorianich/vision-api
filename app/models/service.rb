@@ -11,8 +11,8 @@ class Service < ApplicationRecord
 
   scope :by_owner, ->(owner_id) { where(owner_id: owner_id) }
   scope :by_name, ->(name) { where('name like ?', "#{name}%") }
-  scope :min_price, ->(price) { where(arel_table[:price].gt(price)) }
-  scope :max_price, ->(price) { where(arel_table[:price].lt(price)) }
+  scope :min_price, ->(price) { where('price >= ?', price) }
+  scope :max_price, ->(price) { where('price <= ?', price) }
 
   def net
     price * 0.9

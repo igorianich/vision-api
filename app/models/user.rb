@@ -9,6 +9,9 @@ class User < ApplicationRecord
   has_many :outgoing_responses, through: :own_requests, source: :response
   has_many :incoming_responses, through: :requests, source: :response
 
+  scope :by_skill_name, ->(name) { joins(:skills).where('skills.name like ?', "#{name}%") }
+
+
   has_secure_password
 
   enum role: { buyer: 0, seller: 1, admin: 2 }

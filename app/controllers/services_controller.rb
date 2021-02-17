@@ -3,12 +3,18 @@
 class ServicesController < ApplicationController
   before_action :load_service, only: %i[show update destroy services_errors]
 
+  has_scope :by_owner
+  has_scope :by_name
+  has_scope :min_price
+  has_scope :max_price
+
   def index
     services = policy_scope(Service)
-    filtering_params.each do |filter, value|
-      services = services.public_send(filter, value)
-    end
-    render json: services
+    render json: apply_scopes(services)
+    # filtering_params.each do |filter, value|
+    #   services = services.public_send(filter, value)
+    # end
+    # render json: services
   end
 
   def show
@@ -50,7 +56,7 @@ class ServicesController < ApplicationController
     params.require(:service).permit(:name, :description, :price)
   end
 
-  def filtering_params
-    params.permit(:by_name, :by_owner, :min_price, :max_price)
-  end
+  # def filtering_params
+  #   params.permit(:by_name, :by_owner, :min_price, :max_price)
+  # end
 end

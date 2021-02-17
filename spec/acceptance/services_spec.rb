@@ -5,6 +5,7 @@ require 'rspec_api_documentation/dsl'
 
 RSpec.resource 'Services' do
   let!(:service) { create(:service) }
+  let!(:other_service) { create(:service) }
   let(:service_id) { service.id }
 
   header 'Authorization', :auth_token
@@ -13,14 +14,86 @@ RSpec.resource 'Services' do
   end
 
   get '/services' do
-    example_request 'getting a list of services' do
-      expect(status).to eq(200)
-      services_hash = JSON.parse(response_body, symbolize_names: true)
-      expect(services_hash[0][:id]).to eq(service.id)
-      expect(services_hash[0][:name]).to eq(service.name)
-      expect(services_hash[0][:owner_id]).to eq(service.owner.id)
-      expect(services_hash[0][:description]).to eq(service.description)
-      expect(services_hash[0][:price]).to eq(service.price)
+    parameter :by_name, 'Name of the service'
+    parameter :by_owner, 'Owner of the service'
+    parameter :min_price, 'Min price of the service'
+    parameter :max_price, 'Max price of the service'
+
+    context 'without scopes' do
+      example_request 'getting a list of services' do
+        expect(status).to eq(200)
+        services_hash = JSON.parse(response_body, symbolize_names: true)
+        expect(services_hash[0][:id]).to eq(service.id)
+        expect(services_hash[0][:name]).to eq(service.name)
+        expect(services_hash[0][:owner_id]).to eq(service.owner.id)
+        expect(services_hash[0][:description]).to eq(service.description)
+        expect(services_hash[0][:price]).to eq(service.price)
+      end
+    end
+
+    context "with valid scope 'by_name'" do
+      let!(:service) { create(:service, name: 'name1') }
+      let!(:other_service) { create(:service, name: 'name2') }
+      let!(:by_name) { service.name }
+
+      example_request 'getting a list of services' do
+        expect(status).to eq(200)
+        services_hash = JSON.parse(response_body, symbolize_names: true)
+        expect(services_hash.pluck(:id)).to match_array([service.id])
+      end
+    end
+    #
+    # context "with invalid scope 'by_name'" do
+    #   let(:by_name) { 'sadasdas' }
+    #
+    #   example_request 'getting a list of services' do
+    #     expect(status).to eq(200)
+    #     services_hash = JSON.parse(response_body, symbolize_names: true)
+    #     expect(services_hash).to eq([])
+    #   end
+    # end
+
+    context "with valid scope 'by_owner'" do
+      let(:by_owner) { service.owner_id }
+
+      example_request 'getting a list of services' do
+        expect(status).to eq(200)
+        services_hash = JSON.parse(response_body, symbolize_names: true)
+        expect(services_hash.pluck(:id)).to match_array([service.id])
+      end
+    end
+    #
+    # context "with invalid scope 'by_owner'" do
+    #   let(:by_owner) { service.owner_id + 10 }
+    #   example_request 'getting a list of services' do
+    #     expect(status).to eq(200)
+    #     services_hash = JSON.parse(response_body, symbolize_names: true)
+    #     expect(services_hash).to match_array([])
+    #   end
+    # end
+
+    context "with valid scope 'min_price'" do
+      let!(:service) { create(:service, price: 30) }
+      let!(:other_service) { create(:service, price: 20) }
+      let!(:min_price) { service.price }
+
+      example_request 'getting a list of services' do
+        expect(status).to eq(200)
+        services_hash = JSON.parse(response_body, symbolize_names: true)
+        expect(services_hash.pluck(:id)).to match_array([service.id])
+      end
+    end
+
+    context "with valid scope 'max_price'" do
+      let!(:service) { create(:service, price: 20) }
+      let!(:other_service) { create(:service, price: 30) }
+      let(:max_price) { service.price }
+
+      example_request 'getting a list of services' do
+        expect(status).to eq(200)
+        services_hash = JSON.parse(response_body, symbolize_names: true)
+        expect(services_hash.pluck(:id)).to match_array([service.id])
+      end
     end
   end
 
