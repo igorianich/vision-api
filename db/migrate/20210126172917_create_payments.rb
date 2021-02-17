@@ -9,7 +9,7 @@ class CreatePayments < ActiveRecord::Migration[6.0]
       t.float :service_price
       t.float :net
       t.float :commission
-      t.column :status, :integer, defoult: 0
+      t.column :status, :integer, default: 0
 
       t.timestamps
     end

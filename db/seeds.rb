@@ -37,7 +37,7 @@ skills = Skill.create(
 services = Service.create(
   [
     {
-      owner_id: 2, name: 'Evaluate your singing', price: 40  ,
+      owner_id: 2, name: 'Evaluate your singing', price: 40,
       description: 'Some description'
     },
     {
@@ -53,40 +53,37 @@ services = Service.create(
 
 requests = Request.create(
   [
-    { requester_id: 1, service_id: 1, text: 'Some text', file: 'Some file', status: 1 },
-    { requester_id: 1, service_id: 2, text: 'Some text', file: 'Some file', status: 1 },
-    { requester_id: 3, service_id: 1, text: 'Some text', file: 'Some file', status: 1  },
-    { requester_id: 3, service_id: 3, text: 'Some text', file: 'Some file', status: 1  }
+    { requester_id: 1, service_id: 1, text: 'Some text', file: 'Some file' },
+    { requester_id: 1, service_id: 2, text: 'Some text', file: 'Some file' },
+    { requester_id: 3, service_id: 1, text: 'Some text', file: 'Some file' },
+    { requester_id: 3, service_id: 3, text: 'Some text', file: 'Some file' }
   ]
 )
 
 responses = Response.create(
   [
-    { request_id: 1, respondent_id: 2, requester_id: 1, text: 'Some text',
-      file: 'Some file'  },
-    { request_id: 3, respondent_id: 2, requester_id: 3, text: 'Some text',
-      file: 'Some file'  },
-    { request_id: 4, respondent_id: 2, requester_id: 3, text: 'Some text',
-      file: 'Some file'  }
+    { request_id: 1, text: 'Some text', file: 'Some file'  },
+    { request_id: 3, text: 'Some text', file: 'Some file'  },
+    { request_id: 4, text: 'Some text', file: 'Some file'  }
   ]
 )
 
 reviews = Review.create(
   [
-    { response_id: 1, reviewer_id: 1, text: 'Some text', file: 'Some file', rate: 4 },
-    { response_id: 2, reviewer_id: 3, text: 'Some text', file: 'Some file', rate: 5 }
+    { response_id: 1, text: 'Some text', file: 'Some file', rate: 4 },
+    { response_id: 2, text: 'Some text', file: 'Some file', rate: 5 }
   ]
 )
 
 payments = Payment.create(
   [
     { request_id: 1, payer_id: 1, seller_id: 2, service_price: 40, net: 35,
-      commission: 5, status: 0 },
-    { request_id: 2, payer_id: 0, seller_id: 2, service_price: 50, net: 40,
-      commission: 10, status: 0 },
+      commission: 5 },
+    { request_id: 2, payer_id: 1, seller_id: 2, service_price: 50, net: 40,
+      commission: 10 },
     { request_id: 3, payer_id: 3, seller_id: 2, service_price: 40, net: 35,
-      commission: 5, status: 0 },
+      commission: 5 },
     { request_id: 4, payer_id: 3, seller_id: 2, service_price: 30, net: 25,
-      commission: 5, status: 0 }
+      commission: 5 }
   ]
 )

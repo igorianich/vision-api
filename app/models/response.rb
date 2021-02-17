@@ -1,10 +1,9 @@
 class Response < ApplicationRecord
   belongs_to :request
-  belongs_to :requester, class_name: 'User'
-  belongs_to :respondent, class_name: 'User'
   has_one :review
-
-  delegate :service, to: :request
+  has_one :requester, through: :request
+  has_one :service, through: :request
+  has_one :respondent, through: :service, source: :owner
 
   validates :file, :text, presence: true, length: { in: 5..100 }
   validate :rights_to_live_response
@@ -12,10 +11,7 @@ class Response < ApplicationRecord
   private
 
   def rights_to_live_response
-    request.service.owner_id == respondent_id ||
-      errors.add(:respondent, "isn't recipient of the request ")
-
-    request.requester_id == requester_id ||
+    request.requester == requester ||
       errors.add(:requester, "don't have this request")
 
     respondent.seller? ||

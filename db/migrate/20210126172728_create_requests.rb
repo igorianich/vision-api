@@ -5,7 +5,7 @@ class CreateRequests < ActiveRecord::Migration[6.0]
       t.belongs_to :service
       t.string :text
       t.string :file
-      t.column :status, :integer, defoult: 0
+      t.column :status, :integer, default: 0
 
       t.timestamps
     end

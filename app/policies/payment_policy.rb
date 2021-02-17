@@ -1,19 +1,18 @@
 class PaymentPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      scope.all
+      case user.role
+      when 'buyer'
+        user.outgoing_payments
+      when 'seller'
+        user.incoming_payments
+      when 'admin'
+        scope.all
+      end
     end
   end
 
   def show?
-    user_is_payer_of_record? #|| @user == @record.request.service.owner
-  end
-
-  def pay?
-    user_is_payer_of_record? && !@record.rejected?
-  end
-
-  def user_is_payer_of_record?
-    @user == @record.payer
+    @user == @record.payer? || @user == @record.request.service.owner
   end
 end

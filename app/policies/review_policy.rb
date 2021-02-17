@@ -22,6 +22,6 @@ class ReviewPolicy < ApplicationPolicy
   end
 
   def user_is_requester_of_response?
-    @user == @record.response.requester
+    @user == @record.response.request.requester
   end
 end

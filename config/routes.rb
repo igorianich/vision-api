@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   post 'sign_in' => 'user_token#sign_in'
-  post 'sign_up' => 'users#sign_up'
+  get 'users' => 'users#index'
+  get 'users/:id' => 'users#show'
+  post 'sign_up' => 'users#create'
   patch 'update_me' => 'users#update'
   # get 'requests' => 'requests#index'
   # get 'responses' => 'responses#index'
@@ -10,7 +12,6 @@ Rails.application.routes.draw do
   resources :requests, only: %i[index create show update destroy]
   resources :responses, only: %i[index create show]
   patch 'requests/:id/decline' => 'requests#decline'
-  patch 'payments/:id/pay' => 'payments#pay'
   resources :payments, only: %i[index show]
   resources :reviews, only: %i[index create show update destroy]
   # resources :users, only: %i[update index]

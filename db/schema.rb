@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 2021_01_26_172917) do
     t.float "service_price"
     t.float "net"
     t.float "commission"
-    t.integer "status"
+    t.integer "status", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["payer_id"], name: "index_payments_on_payer_id"
@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 2021_01_26_172917) do
     t.bigint "service_id"
     t.string "text"
     t.string "file"
-    t.integer "status"
+    t.integer "status", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["requester_id"], name: "index_requests_on_requester_id"
@@ -44,27 +44,21 @@ ActiveRecord::Schema.define(version: 2021_01_26_172917) do
 
   create_table "responses", force: :cascade do |t|
     t.bigint "request_id"
-    t.bigint "respondent_id"
-    t.bigint "requester_id"
     t.string "text"
     t.string "file"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["request_id"], name: "index_responses_on_request_id"
-    t.index ["requester_id"], name: "index_responses_on_requester_id"
-    t.index ["respondent_id"], name: "index_responses_on_respondent_id"
   end
 
   create_table "reviews", force: :cascade do |t|
     t.bigint "response_id"
-    t.bigint "reviewer_id"
     t.string "text"
     t.integer "rate"
     t.string "file"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["response_id"], name: "index_reviews_on_response_id"
-    t.index ["reviewer_id"], name: "index_reviews_on_reviewer_id"
   end
 
   create_table "services", force: :cascade do |t|
