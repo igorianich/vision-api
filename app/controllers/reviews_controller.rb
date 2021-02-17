@@ -8,7 +8,7 @@ class ReviewsController < ApplicationController
   end
 
   def create
-    review = current_user.reviews.new(review_params)
+    review = Review.new(review_params)
     authorize review
     if review.save
       render json: review
@@ -43,6 +43,6 @@ class ReviewsController < ApplicationController
   end
 
   def review_params
-    params.require(:review).permit(:name, :rate, :file, :text, :response_id)
+    params.require(:review).permit(:rate, :file, :text, :response_id)
   end
 end

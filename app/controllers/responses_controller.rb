@@ -7,21 +7,16 @@ class ResponsesController < ApplicationController
   end
 
   def show
-    answer = Response.find(params[:id])
-    authorize answer
+    answer = authorize Response.find(params[:id])
     render json: answer
   end
 
   def create
-    request = Request.find(response_params[:request_id])
-    answer = Response.new(
-      requester: request.requester, respondent: current_user, **response_params
-    ) && payment = request.payment
-    if answer.save
-      request.completed! && payment.pay
-      render json: { answer: answer, request: request, payment: payment }
+    result = Responses::Create.new.call(response_params)
+    if result.success?
+      render json: { response: result.success }
     else
-      render_errors(answer.errors)
+      render_errors(result.failure)
     end
   end
 
